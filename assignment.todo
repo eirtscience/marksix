@@ -1,0 +1,34 @@
+Project:
+
+  Mark Six: @started(20-07-20 09:30)
+
+    Todos:
+      Create ticker handler server:
+        ☐ Register each user by generating a random token for authentication @30m
+        ☐ Create a flat file database to store user betting data @30m
+        ☐ Create a handler to accept any request @2h
+        ☐ Contenize the application @1h
+        ☐ Implement unit testing @40m
+
+      Create restapi application:
+        ☐ Create buying api @1h
+        ☐ Create checking api @1h
+        ☐ Create user interface for the betting @1h30m
+        ☐ Create user interface for checking @1h30m
+        ☐ Contenize the application @30m
+        ☐ Implement unit testing @40m
+
+      Create chat client application:
+        ☐ Create buying request @1h
+        ☐ Create checking request @1h
+        ☐ Implement unit testing @40m
+
+      Automatic testing:
+        ☐ Create high level automatic testing for the system @1h
+
+      ☐ Create a make file to automatic deployed the system @30m
+
+      ☐ Readme note @30m
+        Add documentation on how to use the system.
+
+    

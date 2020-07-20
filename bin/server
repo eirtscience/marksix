@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python server/start_worker_server.py
