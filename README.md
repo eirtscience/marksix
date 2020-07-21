@@ -19,7 +19,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
 
   - `Web server`:
 
-    It is a python flask webserverapplication that handle any http marksix betting connecxion by default running on port 9002.
+    It is a python flask webserver application that handle any http marksix betting connecxion by default running on port 9002.
 
   - `Chat application`:
 
