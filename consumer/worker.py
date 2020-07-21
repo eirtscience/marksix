@@ -11,13 +11,17 @@ from modules.e_object import e_object
 from modules.e_datetime import Timer
 from modules.e_file import File
 from modules.e_sock import e_sock
+from modules.e_datetime import Timer
 import struct
 from random import sample
+from objects.marksix import MarkSix
+from objects.user import User
 
 # initialize this global variable to handle the client data
 data_queue = {
     "draw": {},
-    "user": {}
+    "user": {},
+    "draw_history": {}
 }
 
 
@@ -96,6 +100,16 @@ class DataHandler(socketserver.BaseRequestHandler, e_object):
                 # print(user_data)
                 # print(data_queue["draw"])
                 self.request.sendall((json.dumps(user_data)).encode("utf-8"))
+
+            if request_data.action == "list_draw":
+                if token:
+                    data = {}
+                    if data_queue["draw_history"].get(token):
+                        data = data_queue["draw_history"].get(token)
+
+                    return self.request.sendall((json.dumps(data)).encode("utf-8"))
+                else:
+                    return self.request.sendall((json.dumps(list(data_queue["draw_history"].values()))).encode("utf-8"))
 
             # self.request.sendall(
             #     (json.dumps({"message": "Recive the request", "status": "success"}).encode("utf-8")))
@@ -194,6 +208,7 @@ class BettingManager:
         if current_draw_id:
             # print("Checking previous winner")
             # print(data_queue["draw"].get(current_draw_id))
+            is_win = False
             if data_queue["draw"].get(current_draw_id) is not None:
                 list_user = data_queue["draw"][current_draw_id].get(
                     "users")
@@ -201,51 +216,85 @@ class BettingManager:
                     for user_token in list_user:
                         user = data_queue["user"][user_token]
                         if user:
-                            data_queue["user"][user_token]["win"] = (
-                                user.get("betting_number") == data_queue["draw"][current_draw_id].get("mark_six"))
+                            if not is_win:
+                                is_win = (
+                                    user.get("betting_number") == data_queue["draw"][current_draw_id].get("mark_six"))
+                                data_queue["user"][user_token]["win"] = is_win
 
                             data_queue["user"][user_token]["draw_status"] = "completed"
+
+                for draw_id, draw_data in data_queue.get("draw").items():
+                    draw_history = {}
+                    if draw_data.get("mark_six"):
+                        list_number = (
+                            list(map(str, draw_data.get("mark_six"))))
+                        draw_history["id"] = draw_id
+                        draw_history["draw_number"] = "-".join(list_number)
+                        draw_history["special_number"] = draw_data.get(
+                            "special_number")
+                        draw_history["date"] = draw_data.get(
+                            "date")
+                        draw_history["prize"] = "No winner"
+                        if is_win:
+                            draw_history["prize"] = "One winner"
+
+                        data_queue["draw_history"][draw_id] = draw_history
 
                 # print(data_queue["user"])
 
     def start(self):
-        self.draw_id = e_object.gen_rand_str(15)
-        print("Start new drawing with ID {}".format(self.draw_id))
+        try:
+            self.draw_id = e_object.gen_rand_str(15)
+            print("Start new drawing with ID {}".format(self.draw_id))
 
-        data_queue["draw"][self.draw_id] = {"users": []}
+            data_queue["draw"][self.draw_id] = {"users": []}
 
-        result_thread = threading.Thread(target=self.check_draw_result)
-        result_thread.start()
+            result_thread = threading.Thread(target=self.check_draw_result)
+            result_thread.start()
 
-        BettingManager.CURRENT_DRAW_ID = self.draw_id
-        self.timer.start_time()
-        self.draw()
+            BettingManager.CURRENT_DRAW_ID = self.draw_id
+            self.timer.start_time()
+            self.draw()
+        except KeyboardInterrupt:
+            pass
+        except Exception:
+            pass
 
     def draw(self):
 
-        while True:
-            time_in_sec = int(self.timer.diff_btwn_date_in_sec())
-            time_elapse = BettingManager.DRAW_SEC - time_in_sec
-            if time_elapse < 0:
-                break
-            data_queue["draw"][self.draw_id]["time_elaspsed_before_draw"] = time_elapse
-            if time_in_sec == BettingManager.DRAW_SEC:
-                draw_number = sample(range(0, 50), 7)
-                mark_six = draw_number[:6]
-                special_number = draw_number[-1:]
-                BettingManager.COUNT_DRAW += 1
-                data_queue["draw"][self.draw_id].update({
-                    "mark_six": mark_six,
-                    "special_number": special_number
-                })
-                break
-            time.sleep(2)
-        self.start()
+        try:
+            while True:
+                time_in_sec = int(self.timer.diff_btwn_date_in_sec())
+                time_elapse = BettingManager.DRAW_SEC - time_in_sec
+                if time_elapse < 0:
+                    break
+                data_queue["draw"][self.draw_id]["time_elaspsed_before_draw"] = time_elapse
+                if time_in_sec == BettingManager.DRAW_SEC:
+                    draw_number = sample(range(1, 50), 7)
+                    mark_six = draw_number[:6]
+                    special_number = draw_number[6]
+                    BettingManager.COUNT_DRAW += 1
+                    data_queue["draw"][self.draw_id].update({
+                        "mark_six": mark_six,
+                        "special_number": special_number,
+                        "date": Timer.str_now("%Y/%m/%d %H:%M")
+                    })
+                    break
+                time.sleep(2)
+            self.start()
+        except KeyboardInterrupt:
+            pass
+        except Exception:
+            pass
 
 
 class DataManager(object):
     """Declare to run the current server.
     """
+    @staticmethod
+    def write_server_post(port):
+        with open("modules/.port", "w") as f:
+            f.writelines("{}".format(port))
 
     @staticmethod
     def server_thread(port=8089, host=""):
@@ -259,7 +308,8 @@ class DataManager(object):
             This way the server will handle each client request
                 in the separate thread process
             """
-            server = ThreadTCPServer((host, port), DataHandler)
+            DataManager.write_server_post(port)
+            server = ThreadTCPServer((host, int(port)), DataHandler)
 
             # let us initialize the thread method with the THreadTCPServer
             # object
@@ -273,5 +323,7 @@ class DataManager(object):
             betting_thread.daemon = True
             betting_thread.start()
 
-        except KeyboardInterrupt:
+        except KeyboardInterrupt as ex:
             pass
+        # except Exception as ex:
+        #     print(ex)

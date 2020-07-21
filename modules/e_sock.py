@@ -3,6 +3,7 @@ import json
 from modules.e_object import e_object
 import logging
 import struct
+from os import path
 
 
 class e_sock:
@@ -15,13 +16,18 @@ class e_sock:
         self.send_data = None
         # super(socket)
 
+    def get_server_port(self):
+        if path.isfile("modules/.port"):
+            with open("modules/.port") as f:
+                self.port = int(f.readline())
+
     def set_data(self, data):
         self.send_data = data
 
     def connect(self):
         is_connect = True
         try:
-
+            self.get_server_port()
             self.connect_sock.connect((self.host, self.port))
 
         except ConnectionRefusedError as ex:

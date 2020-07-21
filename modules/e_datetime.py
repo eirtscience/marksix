@@ -44,8 +44,9 @@ class Timer(object):
         local_time = time.localtime(time.time())
         self.end_timer = dte.datetime(*self.get_datetime(local_time))
 
-    def str_now(self):
-        return datetime.now().strftime("%Y%m%d")
+    @classmethod
+    def str_now(self, str_format="%Y%m%d"):
+        return datetime.now().strftime(str_format)
 
     def diff_btwn_date_in_sec(self):
 

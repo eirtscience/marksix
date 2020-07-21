@@ -1,0 +1,25 @@
+version: "3.5"
+
+networks: 
+  marksix
+
+services:
+  consumer:
+    container_name: "marksix_consumer"
+    build: 'consumer/'
+    restart: always
+    networks:
+      - marksix
+    volumes:
+      - ./:/code/
+    command: sh -c "./main.sh consumer"
+
+  web_server:
+    container_name: "marksix_webserver"
+    build: 'web/'
+    restart: always
+    networks:
+      - marksix
+    volumes:
+      - ./:/code/
+    command: sh -c "./main.sh web_server"

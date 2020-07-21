@@ -2,7 +2,7 @@ import urwid
 from collections import deque
 from threading import Thread
 import threading
-from .better import Emitter
+from producer.better import Emitter
 import time
 
 
@@ -167,7 +167,7 @@ You can also asynchronously output messages with Commander.output('message') """
             if res == Commander.Exit:
                 raise urwid.ExitMainLoop()
             elif res:
-                self.output(str(res))
+                self.output(str(res), "normal")
         else:
             if line in ('q', 'quit', 'exit'):
                 raise urwid.ExitMainLoop()
@@ -205,14 +205,19 @@ class TestCmd(Command):
         Command.__init__(self)
         self.emitter = Emitter()
         self.body = []
+        self.error = []
 
     def do_bet(self, *args):
-        betting_number = '-'.join(args)
-        self.emitter.betting_number = betting_number
-        self.emitter.emmit_bet()
-        draw_thread = threading.Thread(target=self.check_result)
-        draw_thread.start()
-        return self.show_draw()
+        try:
+            betting_number = '-'.join(args)
+            self.emitter.betting_number = betting_number
+            self.emitter.validate()
+            self.emitter.emmit_bet()
+            draw_thread = threading.Thread(target=self.check_result)
+            draw_thread.start()
+            return self.show_draw()
+        except Exception as ex:
+            self.error.append(str(ex))
 
     def show_draw(self, data=None):
 

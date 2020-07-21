@@ -1,0 +1,29 @@
+#!/usr/bin/python
+from web.server import app
+import argparse
+import sys
+import os
+
+
+# check if the command line file called is the main file
+if __name__ == "__main__":
+
+    # waiting for the keyboardInterrupt action issue by the user
+    try:
+        # called to start the program
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--port', nargs='?',
+                            help='Port to use for the Web server')
+
+        args = parser.parse_args()
+        app.run(host='0.0.0.0', port=args.port or 5000, debug=True)
+    except KeyboardInterrupt:
+        """if the program catch any key that request an interrupt
+           immediate of the program.Print this message to the user.
+        """
+        print("\nOperation cancel by the user")
+        try:
+            sys.exit(0)
+        except SystemExit as ex:
+            print(ex)
+            os._exit(0)

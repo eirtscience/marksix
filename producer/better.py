@@ -4,7 +4,7 @@ from modules.e_file import File
 from modules.e_array import e_array
 import logging
 import os
-
+import re
 import threading
 import time
 
@@ -56,6 +56,26 @@ class Emitter:
         self.token = token
         self.clientsocket = None
 
+    def check_input_number(self, number):
+        if int(number) > 49 or int(number) < 1:
+            return False
+        return True
+
+    def validate(self):
+        res = re.split(r"[\-| ]+", self.betting_number)
+        len_num = len(res)
+        if len_num > 6 or len_num < 6:
+            raise Exception("You must select unless 6 numbers")
+
+        map_res = map(self.check_input_number, res)
+
+        if not all(map_res):
+            raise Exception("The input number must be between 1 to 49")
+
+        # if (" " not in self.betting_number) or ("-" not in self.betting_number):
+        #     raise Exception(
+        #         "The betting number provided is incorrect, please use '-' or 'space character' to separate the number")
+
     def emmit_bet(self):
 
         self.clientsocket = e_sock()
@@ -99,8 +119,52 @@ class Emitter:
 
         return clientsocket.getall(data_type="json")
 
+    def emmit_list_draw(self):
+
+        clientsocket = e_sock()
+
+        is_connect = clientsocket.connect()
+
+        sender = Sender(action="list_draw")
+
+        sender.token = self.token
+
+        transfer_data = sender.transfer()
+
+        if(is_connect):
+
+            clientsocket.set_data(transfer_data)
+
+            clientsocket.sendall("json")
+            # clientsocket.close()
+
+        return clientsocket.getall(data_type="json")
+
     def getData(self):
         return self.clientsocket.getall(data_type="json")
+
+    def show_draw(self, data=None):
+
+        if data:
+            draw_data = data
+        else:
+            draw_data = self.getData()
+
+        out = """
+Beeting Number : {}
+Draw Id        : {}
+Token          : {}
+      """.format(draw_data.get("betting_number"), draw_data.get("draw_id"), draw_data.get("token"))
+
+        if (draw_data.get("win") != None) or (draw_data.get("win") in [True, False]):
+            out = """
+Beeting Number : {}
+Draw Id        : {}
+Token          : {}
+Win            : {}
+      """.format(draw_data.get("betting_number"), draw_data.get("draw_id"), draw_data.get("token"), draw_data.get("win"))
+
+        print(out)
 
 
 # def start_transaction(transaction_delay):

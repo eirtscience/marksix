@@ -1,15 +1,13 @@
 #!/usr/bin/python
 
-from client.chat import TestCmd, Commander
+from chat.chat import TestCmd, Commander
 from threading import Thread
 
-if __name__ == '__main__':
 
+def main():
     try:
         test_cmd = TestCmd()
         c = Commander('MarkSix', cmd_cb=test_cmd)
-
-        # Test asynch output -  e.g. comming from different thread
         import time
 
         def run():
@@ -18,6 +16,9 @@ if __name__ == '__main__':
                 while test_cmd.body:
                     output = test_cmd.body.pop(0)
                     c.output(output)
+                while test_cmd.error:
+                    output = test_cmd.error.pop(0)
+                    c.output(output, "error")
         t = Thread(target=run)
         t.daemon = True
         t.start()
@@ -26,3 +27,7 @@ if __name__ == '__main__':
         c.loop()
     except KeyboardInterrupt:
         pass
+
+
+if __name__ == '__main__':
+    main()
