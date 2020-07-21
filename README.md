@@ -4,7 +4,7 @@
   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIE1D67CNstDLqGPwAPiz6mo6RPeOsG9gEsGAwkQB0-mrfzx2z&s"><br><br>
 </div>
 
-# `Marksix-Deployment`
+# `Marksix`
 
 This document highligth the manual or automatic deployment and installation of the marksix applications. The user of this guide should be familiar with the Linux environment,have basic understanding of Python, git, docker. 
 
@@ -145,59 +145,82 @@ The Marksix project is comprised with 3 type of applications, the betting server
 
      - `Run Server`
 
-        ```sh
-        ~$ marksix run
-        ```
+        - `Run on the host`
+           
+           The below command will run the betting and the http server in the background.
+
+          ```sh
+          ~$ marksix run host
+          ```
+        - `Run with docker`
+
+          ```sh
+          ~$ marksix run docker
+          ```
 
      - `Run Application`
 
 
-     - `Automatic Simulator`
+        - `Automatic Simulator`
 
-        In the cloned folder , run the file called `automate_client.py`.
+            In the cloned folder , run the file called `automate_client.py`.
 
-        ```sh
-        ~$ python automate_client.py
-        ```
-        The `automatic_client` client file will randomly simulate the betting user at the same time check the result of his betting.
+            ```sh
+            ~$ python automate_client.py
+            ```
+            The `automatic_client` client file will randomly simulate the betting user at the same time check the result of his betting.
 
-     - `Http Request`
+        - `Http Request`
 
-        you can also submit a betting number using a linux curl command
+            you can also submit a betting number using a linux curl command
 
-        - `Marksix Bet`
+            - `Marksix Bet`
 
-          ```sh
-          ~$ curl -d '{"number":"21 11 33 5 7 1"}' -X POST http://127.0.0.1:9002/bet/ && echo
+              ```sh
+              ~$ curl -d '{"number":"21 11 33 5 7 1"}' -X POST http://127.0.0.1:9002/bet/ && echo
 
-          {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 98}
+              {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 98}
 
-          ```
+              ```
 
-        - `Marksix Ticket`
+            - `Marksix Ticket`
 
-          ```sh
-          ~$ curl -d "21 11 33 5 7 1" -X POST http://127.0.0.1:9002/ticket/
-          {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 20}
-          ```
+              On the same terminal to view the draw progress, use the below curl command. 
+              ```sh
+              ~$ curl http://127.0.0.1:9002/ticket/ && echo
+              {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 20}
+              ```
 
-        - `Marksix Draw`
+            - `Marksix Draw`
+              You can also view the draw history using the below curl command.
 
-          ```sh
-          ~$ curl  http://127.0.0.1:9002/draw/ && echo
+              ```sh
+              ~$ curl  http://127.0.0.1:9002/draw/ && echo
 
-          [{"id": "df93be896f31406", "draw_number": "2-12-1-11-24-33", "special_number": 35, "date": "2020/07/21 15:40", "prize": "No winner"}, {"id": "e1365431b302471", "draw_number": "24-35-18-11-34-14", "special_number": 17, "date": "2020/07/21 15:40", "prize": "No winner"}]
-          ```
+              [{"id": "df93be896f31406", "draw_number": "2-12-1-11-24-33", "special_number": 35, "date": "2020/07/21 15:40", "prize": "No winner"}, {"id": "e1365431b302471", "draw_number": "24-35-18-11-34-14", "special_number": 17, "date": "2020/07/21 15:40", "prize": "No winner"}]
+              ```
 
-    - `Chat Application`
+        - `Chat Application`
 
 
-      <div align="center" style="">
-        <img src="doc/images/chat.png"><br><br>
-     </div>
+            <div align="center" style="">
+              <img src="doc/images/chat.png"><br><br>
+            </div>
 
-        ```sh
-        ~$ python ./chat_app
-        ```
+            ```sh
+            ~$ python ./chat_app
+            ```
+            to submit a betting number "11-21-4-37-11-26", in the command terminal enter "bet 11-21-4-37-11-26". This chat terminal will be listen into the result event. Once the result of the draw is available the betting server will push the result into your terminal.
+
+            You can also ask for the result by simply type "draw".
+
+  - `Kill all the server`
+    
+    - `Kill all the server on the host`
+
+      The below command will destroy the betting 
+      ```sh
+      ~$ marksix kill
+      ```
 
 
