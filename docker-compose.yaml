@@ -1,25 +1,29 @@
 version: "3.5"
 
 networks: 
-  marksix
+  marksix:
 
 services:
   consumer:
     container_name: "marksix_consumer"
-    build: 'consumer/'
+    build: './'
     restart: always
     networks:
       - marksix
     volumes:
       - ./:/code/
-    command: sh -c "./main.sh consumer"
+    command: sh -c "python consumer_app --draw 100"
+    ports: 
+      - 9001:8089
 
   web_server:
     container_name: "marksix_webserver"
-    build: 'web/'
+    build: './'
     restart: always
     networks:
       - marksix
+    ports: 
+      - 9002:5000
     volumes:
       - ./:/code/
-    command: sh -c "./main.sh web_server"
+    command: sh -c "python web_app --bhost marksix_consumer --bport 8089"

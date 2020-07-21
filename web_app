@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from web.server import app
+from modules.e_sock import e_sock
 import argparse
 import sys
 import os
@@ -15,7 +16,15 @@ if __name__ == "__main__":
         parser.add_argument('--port', nargs='?',
                             help='Port to use for the Web server')
 
+        parser.add_argument('--bport', nargs='?',
+                            help='Port to use for the betting server')
+
+        parser.add_argument('--bhost', nargs='?',
+                            help='Hostname to use for the betting server')
+
         args = parser.parse_args()
+        e_sock.HOSTNAME = args.bhost
+        e_sock.PORT = args.bport
         app.run(host='0.0.0.0', port=args.port or 5000, debug=True)
     except KeyboardInterrupt:
         """if the program catch any key that request an interrupt

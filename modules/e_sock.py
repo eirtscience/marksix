@@ -8,6 +8,9 @@ from os import path
 
 class e_sock:
 
+    HOSTNAME = None
+    PORT = None
+
     def __init__(self, host="localhost", port=8089):
         self.connect_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.json = json
@@ -17,9 +20,16 @@ class e_sock:
         # super(socket)
 
     def get_server_port(self):
+
         if path.isfile("modules/.port"):
             with open("modules/.port") as f:
                 self.port = int(f.readline())
+
+        if e_sock.HOSTNAME:
+            self.host = e_sock.HOSTNAME
+
+        if e_sock.PORT:
+            self.port = int(e_sock.PORT)
 
     def set_data(self, data):
         self.send_data = data

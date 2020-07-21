@@ -16,9 +16,11 @@ def main():
                 while test_cmd.body:
                     output = test_cmd.body.pop(0)
                     c.output(output)
+
                 while test_cmd.error:
                     output = test_cmd.error.pop(0)
                     c.output(output, "error")
+
         t = Thread(target=run)
         t.daemon = True
         t.start()
