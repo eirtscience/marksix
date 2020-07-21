@@ -179,7 +179,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
               ```sh
               ~$ curl -d '{"number":"21 11 33 5 7 1"}' -X POST http://127.0.0.1:9002/bet/ && echo
 
-              {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 98}
+              {"betting_number": "21 11 33 5 7 1", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 98}
 
               ```
 
@@ -188,7 +188,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
               On the same terminal to view the draw progress, use the below curl command. 
               ```sh
               ~$ curl http://127.0.0.1:9002/ticket/ && echo
-              {"betting_number": "1 2 3 4 5 6", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 20}
+              {"betting_number": "21 11 33 5 7 1", "draw_status": "In progress", "token": "bb989f353fc", "draw_id": "1e28c17a7c1b4e2", "time_before_draw": 20}
               ```
 
             - `Marksix Draw`
