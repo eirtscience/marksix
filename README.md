@@ -167,12 +167,12 @@ The Marksix project is comprised with 3 type of applications, the betting server
 
         - `Automatic Simulator`
 
-            In the cloned folder , run the file called `automate_client.py`.
+            In the cloned folder execute the below command.
 
             ```sh
-            ~$ python automate_client.py
+            ~$ marksix test auto
             ```
-            The `automatic_client` client file will randomly simulate the betting user at the same time check the result of his betting.
+            The `auto` command will randomly simulate the betting user at the same time check the result of his betting.
 
         - `Http Request`
 
@@ -212,7 +212,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
             </div>
 
             ```sh
-            ~$ python ./chat_app
+            ~$ marksix test chat
             ```
             to submit a betting number "11-21-4-37-11-26", in the command terminal enter "bet 11-21-4-37-11-26". This chat terminal will be listen into the result event. Once the result of the draw is available the betting server will push the result into your terminal.
 

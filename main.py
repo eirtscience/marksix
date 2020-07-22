@@ -123,17 +123,27 @@ if __name__ == "__main__":
         parser.add_argument('app', metavar='N', type=str,
                             help='an integer for the accumulator')
 
-        parser.add_argument('--port', nargs='?',
-                            help='Port to use for the server')
+        list_argument = {
+            '--port': 'Port to use for the server',
+            '--draw': 'Time slot for drawing',
+            '--bport': 'Port to use for the betting server',
+            '--bhost': 'Hostname to use for the betting server'
+        }
 
-        parser.add_argument('--draw', nargs='?',
-                            help='Time slot for drawing')
+        for key, value in list_argument.items():
+            parser.add_argument(key, nargs='?', help=value)
 
-        parser.add_argument('--bport', nargs='?',
-                            help='Port to use for the betting server')
+        # parser.add_argument('--port', nargs='?',
+        #                     help='Port to use for the server')
 
-        parser.add_argument('--bhost', nargs='?',
-                            help='Hostname to use for the betting server')
+        # parser.add_argument('--draw', nargs='?',
+        #                     help='Time slot for drawing')
+
+        # parser.add_argument('--bport', nargs='?',
+        #                     help='Port to use for the betting server')
+
+        # parser.add_argument('--bhost', nargs='?',
+        #                     help='Hostname to use for the betting server')
 
         args = parser.parse_args()
 

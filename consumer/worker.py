@@ -57,6 +57,15 @@ class DataHandler(socketserver.BaseRequestHandler, e_object):
     def handle_transaction_data(self, recieve_data):
         pass
 
+    def __get_user_bet(self, betting_number, token):
+        return {
+            "betting_number": betting_number,
+            "draw_status": "In progress",
+            "token": token,
+            "draw_id": BettingManager.CURRENT_DRAW_ID,
+            "time_before_draw": data_queue["draw"][BettingManager.CURRENT_DRAW_ID]["time_elaspsed_before_draw"]
+        }
+
     def handler_requester(self, request_data):
 
         is_save = False
@@ -68,28 +77,18 @@ class DataHandler(socketserver.BaseRequestHandler, e_object):
         try:
             if request_data.action == "bet":
                 betting_number = request_data.number
-                # print(request_data.token)
-                data_queue["user"][str(token)] = {
-                    "betting_number": betting_number,
-                    "draw_status": "In progress",
-                    "token": token,
-                    "draw_id": BettingManager.CURRENT_DRAW_ID,
-                    "time_before_draw": data_queue["draw"][BettingManager.CURRENT_DRAW_ID]["time_elaspsed_before_draw"]
-                }
+                #
+                data_queue["user"][str(token)] = self.__get_user_bet(
+                    betting_number, token)
 
                 data_queue["draw"][BettingManager.CURRENT_DRAW_ID]["users"].append(
                     token)
 
-                # print(data_queue["draw"][BettingManager.CURRENT_DRAW_ID])
-
-                # print(request_data.number)
-                # print("In action bet")
-                # pass
                 self.request.sendall(
                     (json.dumps(data_queue["user"][str(token)]).encode("utf-8")))
 
             if request_data.action == "draw":
-                # print("In action draw")
+                #
                 user_data = data_queue["user"].get(str(token))
 
                 if user_data["draw_status"] != "completed":
