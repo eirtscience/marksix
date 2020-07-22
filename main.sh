@@ -10,7 +10,7 @@ kill_consumner(){
     pid_file="consumer/.pid"
     if [ -f $pid_file ];then
       pid=`cat $pid_file`
-      kill -9 $pid
+      sudo kill -9 $pid
       rm -rf $pid_file
     fi
 }
@@ -19,7 +19,7 @@ kill_web_server(){
     pid_file="web/.pid"
     if [ -f $pid_file ];then
       pid=`cat $pid_file`
-      kill -9 $pid
+      sudo kill -9 $pid
       rm -rf $pid_file
     fi
 }
@@ -30,7 +30,7 @@ kill_all()
 
     if [ -f $pid_file ];then
       pid=`cat $pid_file`
-      kill -9 $pid
+      sudo kill -9 $pid
       rm -rf $pid_file
     fi
 
@@ -60,7 +60,7 @@ while getopts "pd" opt; do
   esac
 done
 
-  python consumer_app --port $PORT --draw $DRAW_INTERVAL 1>/dev/null &
+  python main.py consumer --port $PORT --draw $DRAW_INTERVAL 1>/dev/null &
 
   echo $! > consumer/.pid
 }
@@ -87,14 +87,14 @@ web_server()
     esac
   done
 
-  python web_app --port $PORT >/dev/null 2>&1 &
+  python main.py web --port $PORT >/dev/null 2>&1 &
 
   echo $! > web/.pid
 }
 
 chat(){
 
-  python chat_app
+  python main.py chat
 
 }
 

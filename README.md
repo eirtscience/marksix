@@ -99,7 +99,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
               ~$ python_path=`which python`
               ~$ python6_path=`which python3.6`
               ~$ sudo unlink $python_path
-              ~$ sudo ln -s $python_path $python6_path
+              ~$ sudo ln -s $python6_path $python_path
             ```
 
         - `Checking the pre-requisite packages installation`
@@ -147,11 +147,15 @@ The Marksix project is comprised with 3 type of applications, the betting server
 
         - `Run on the host`
            
-           The below command will run the betting and the http server in the background.
+           The below command will run the betting and the http server in the background. Before running this command make you create a virtual environment and your python version is 3.5+.
+
+           To run the server make sure you are in the cloned folder.
 
           ```sh
           ~$ marksix run host
           ```
+          Now you run the above command go ahead and test it.
+
         - `Run with docker`
 
           ```sh
