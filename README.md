@@ -54,14 +54,8 @@ The Marksix project is comprised with 3 type of applications, the betting server
 
     Download the installation script following the below command.
     ```sh
-    ~$ sudo curl -L "https://raw.githubusercontent.com/eirtdev/shell/master/marksix" -o /usr/local/bin/marksix
+    ~$ sudo curl -L "https://raw.githubusercontent.com/eirtdev/shell/master/marksix" -o /usr/local/bin/marksix && sudo chmod +x /usr/local/bin/marksix
     ```
-    Now you have successfuly download the installation script file, go ahead and make it executable with the below command.
-
-    ```sh
-    ~$ sudo chmod +x /usr/local/bin/marksix
-    ```
-
 
     Now go ahead and run the below command and wait.
 
@@ -196,7 +190,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
               ```
 
             - `Marksix Draw`
-            
+
               You can also view the draw history using the below curl command.
 
               ```sh
