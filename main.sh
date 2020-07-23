@@ -98,6 +98,10 @@ chat(){
 
 }
 
+test(){
+  python -m unittest test.py 
+}
+
 kill_server(){
 
   case $1 in 
@@ -145,6 +149,11 @@ main(){
 
     kill)
       kill_server $@
+    ;;
+    test)
+
+      test
+      
     ;;
 
     *)
