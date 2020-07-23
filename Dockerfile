@@ -6,5 +6,7 @@ WORKDIR /code
 COPY package.txt /code/
 COPY . /code/
 RUN pip3 install -r package.txt
-RUN export LC_ALL=C
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 EXPOSE 8089
