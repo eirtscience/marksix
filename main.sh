@@ -35,6 +35,8 @@ kill_all()
     fi
 
   done
+
+  sudo docker stop $(sudo docker ps -q -f name=marksix*)
 }
 
 
@@ -153,7 +155,7 @@ main(){
     test)
 
       test
-      
+
     ;;
 
     *)

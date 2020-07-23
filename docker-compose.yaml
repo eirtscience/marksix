@@ -12,7 +12,7 @@ services:
       - marksix
     volumes:
       - ./:/code/
-    command: sh -c "python consumer_app --draw 100"
+    command: sh -c "python main.py consumer --draw 100"
     ports: 
       - 9001:8089
 
@@ -26,4 +26,4 @@ services:
       - 9002:5000
     volumes:
       - ./:/code/
-    command: sh -c "python web_app --bhost marksix_consumer --bport 8089"
+    command: sh -c "python main.py web --bhost marksix_consumer --bport 8089"
