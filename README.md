@@ -196,6 +196,7 @@ The Marksix project is comprised with 3 type of applications, the betting server
               ```
 
             - `Marksix Draw`
+            
               You can also view the draw history using the below curl command.
 
               ```sh
