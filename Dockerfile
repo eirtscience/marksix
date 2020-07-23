@@ -6,4 +6,5 @@ WORKDIR /code
 COPY package.txt /code/
 COPY . /code/
 RUN pip3 install -r package.txt
+RUN export LC_ALL=C
 EXPOSE 8089
